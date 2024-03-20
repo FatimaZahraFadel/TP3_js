@@ -78,7 +78,6 @@
         document.getElementById("studentForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
-            // Récupération des valeurs saisies
             var code = document.getElementById("code").value;
             var nom = document.getElementById("nom").value;
             var prenom = document.getElementById("prenom").value;
@@ -92,7 +91,7 @@
                 parseInt(document.getElementById("module6").value)
             ];
 
-            // Validation des valeurs saisies
+            
             var valid = true;
             var errorMessage = "";
             if (code === "" || nom === "" || prenom === "" || semestre === "") {
@@ -112,11 +111,10 @@
                 return;
             }
 
-            // Calcul de la moyenne
+          
             var sum = notes.reduce((a, b) => a + b, 0);
             var average = sum / notes.length;
 
-            // Vérification des conditions de validation du semestre
             var semestreStatus = "";
             if (average >= 12 && notes.filter(note => note < 12 && note >= 8).length < 3) {
                 semestreStatus = "Validé";
@@ -126,7 +124,6 @@
                 semestreStatus = "En attente";
             }
 
-            // Affichage du résultat dans le tableau
             var tableRow = `<tr>
                 <td>${code}</td>
                 <td>${nom}</td>
@@ -142,7 +139,7 @@
                 <td>${semestreStatus}</td>
             </tr>`;
 
-            // Ajout de la ligne au tableau
+           
             var tableContainer = document.getElementById("studentTableContainer");
             var studentTable = document.getElementById("studentTable");
             if (!studentTable) {
@@ -151,7 +148,6 @@
                 studentTable.getElementsByTagName("tbody")[0].insertAdjacentHTML("beforeend", tableRow);
             }
 
-            // Réinitialisation du formulaire
             document.getElementById("studentForm").reset();
             document.getElementById("error").innerText = "";
         });
