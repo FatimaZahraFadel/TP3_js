@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #button {
+            background-color: rgb(0, 110, 255);
+            border: 2px solid rgb(0, 208, 255);
+            height:40px;
+            width: 350px;
+            border-radius:10px ;
+            color:aliceblue;
+            margin-top: 10px;
+        }
+        input {
+            border-radius: 4px;
+            height:30px;
+            width: 300px;
+            border: 1px solid rgb(193, 188, 188);
+            margin-bottom: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        label
+        {
+            font-size: large;
+        }
+        body
+        {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color:rgb(13, 213, 13)">Exo2</h1>
+    <label for="dimension">Dimension de tableau:</label><br>
+    <input type="text" id="dimension" ><br>
+
+    <label for="min">La valeur Minimale:</label><br>
+    <input id="min" type="text"><br>
+
+    <label for="max">La valeur Maximale:</label><br>
+    <input id="max" type="text"><br>
+
+    <button id="button" onclick="generer_tableau()">Générer un tableau</button>
+
+    <div id="error-message" style="color: red; margin-top: 10px;"></div>
+
+    <script>
+        function generer_tableau() {
+            var dim = parseInt(document.getElementById("dimension").value);
+            var min = parseInt(document.getElementById("min").value);
+            var max = parseInt(document.getElementById("max").value);
+
+            var errorMessage = '';
+
+            
+            if (isNaN(dim) || dim < 1) {
+                errorMessage += "La dimension du tableau doit être un entier positif.\n";
+            }
+            if (isNaN(min) || isNaN(max)) {
+                errorMessage += "Les valeurs minimale et maximale doivent être des entiers.\n";
+            }
+            if (min >= max) {
+                errorMessage += "La valeur minimale doit être inférieure à la valeur maximale.\n";
+            }
+
+            if (errorMessage !== '') {
+                document.getElementById("error-message").innerText = errorMessage;
+                return;
+            } else {
+                document.getElementById("error-message").innerText = '';
+            }
+
+           
+            var tableau = "<table>";
+            for (var i = 0; i < dim; i++) {
+                if (i % 10 === 0) {
+                    tableau += "<tr>";
+                }
+                var randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+                tableau += "<td>" + randomNum + "</td>";
+                if ((i + 1) % 10 === 0) {
+                    tableau += "</tr>";
+                }
+            }
+            if (dim % 10 !== 0) {
+                tableau += "</tr>";
+            }
+            tableau += "</table>";
+
+            document.body.insertAdjacentHTML('beforeend', tableau);
+        }
+    </script>
+</body>
+</html>

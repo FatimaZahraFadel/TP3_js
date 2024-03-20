@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 style="color:rgb(60, 233, 60)">Exo1:</h2>
+    <label for="nom">Nom:</label>
+    <input type="text" id="nom"><br><br>
+    <label for="prenom">Prénom:</label>
+    <input type="text" id="prenom"><br><br>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email"><br><br>
+    <label for="mdp">Mot de passe :</label>
+    <input type="password" id="mdp"><br><br>
+    <label for="reaisir">Re-saisir le mot de passe :</label>
+    <input type="password" id="reaisir"><br><br>
+    <label for="tele">Téléphone :</label>
+    <input type="text" id="tele"><br><br>
+    <label for="langue">Langue :</label>
+    <select id="langue">
+        <option value="fr">Français</option>
+        <option value="ar">Arabe</option>
+        <option value="an">Anglais</option>
+    </select><br><br>
+    <label for="commentaire">Commentaire :</label>
+    <textarea id="commentaire"></textarea><br><br>
+
+    <button onclick="valider()">Valider</button>
+    <button onclick="annuler()">Annuler</button>
+
+    <div id="resultat"></div>
+
+
+    <script>
+        function valider() {
+            var nom = document.getElementById("nom").value;
+            var prenom = document.getElementById("prenom").value;
+            var email = document.getElementById("email").value;
+            var mdp = document.getElementById("mdp").value;
+            var reaisir = document.getElementById("reaisir").value;
+            var telephone = document.getElementById("tele").value;
+            var langue = document.getElementById("langue").value;
+            var commentaire = document.getElementById("commentaire").value;
+
+            // Vérification des champs obligatoires
+            if (nom === "" || prenom === "" || email === "" || mdp === "" || reaisir === "" || telephone === "" || langue === "" || commentaire === "") {
+                alert("Tous les champs sont obligatoires.");
+                return;
+            }
+
+            // Vérification de la correspondance des mots de passe
+            if (mdp !== reaisir) {
+                alert("Les mots de passe ne correspondent pas.");
+                return;
+            }
+
+            // Affichage du récapitulatif
+            var resultat = document.getElementById("resultat");
+            resultat.innerHTML = "Nom: " + nom + "<br>" +
+                                 "Prénom: " + prenom + "<br>" +
+                                 "E-mail: " + email + "<br>" +
+                                 "Téléphone: " + telephone + "<br>" +
+                                 "Langue: " + langue + "<br>" +
+                                 "Commentaire: " + commentaire;
+        }
+
+        function annuler() {
+            // Réinitialisation du formulaire
+            document.getElementById("nom").value = "";
+            document.getElementById("prenom").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("mdp").value = "";
+            document.getElementById("reaisir").value = "";
+            document.getElementById("tele").value = "";
+            document.getElementById("langue").value = "fr";
+            document.getElementById("commentaire").value = "";
+
+            // Suppression du récapitulatif
+            document.getElementById("resultat").innerHTML = "";
+        }
+
+       
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'enregistrement des notes</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid black; /* Added border to the table */
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color:rgb(20, 246, 20)">Exo3:</h1>
+    <form id="studentForm">
+        <label for="code">Code étudiant:</label>
+        <input type="text" id="code" required><br><br>
+        <label for="nom">Nom étudiant:</label>
+        <input type="text" id="nom" required><br><br>
+        <label for="prenom">Prénom étudiant:</label>
+        <input type="text" id="prenom" required><br><br>
+        <label for="semestre">Semestre:</label>
+        <select id="semestre" required>
+            <option value="">Sélectionnez le semestre</option>
+            <option value="Semestre 1">Semestre 1</option>
+            <option value="Semestre 2">Semestre 2</option>
+        </select><br><br>
+        <label for="module1">Note module 1:</label>
+        <input type="number" id="module1" required><br><br>
+        <label for="module2">Note module 2:</label>
+        <input type="number" id="module2" required><br><br>
+        <label for="module3">Note module 3:</label>
+        <input type="number" id="module3" required><br><br>
+        <label for="module4">Note module 4:</label>
+        <input type="number" id="module4" required><br><br>
+        <label for="module5">Note module 5:</label>
+        <input type="number" id="module5" required><br><br>S
+        <label for="module6">Note module 6:</label>
+        <input type="number" id="module6" required><br><br>
+        <button type="submit">Valider</button>
+    </form><br><br>
+
+    <div id="error"></div>
+    <div id="studentTableContainer"></div>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Semestre</th>
+                <th>Module 1</th>
+                <th>Module 2</th>
+                <th>Module 3</th>
+                <th>Module 4</th>
+                <th>Module 5</th>
+                <th>Module 6</th>
+                <th>Moyenne</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.getElementById("studentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Récupération des valeurs saisies
+            var code = document.getElementById("code").value;
+            var nom = document.getElementById("nom").value;
+            var prenom = document.getElementById("prenom").value;
+            var semestre = document.getElementById("semestre").value;
+            var notes = [
+                parseInt(document.getElementById("module1").value),
+                parseInt(document.getElementById("module2").value),
+                parseInt(document.getElementById("module3").value),
+                parseInt(document.getElementById("module4").value),
+                parseInt(document.getElementById("module5").value),
+                parseInt(document.getElementById("module6").value)
+            ];
+
+            // Validation des valeurs saisies
+            var valid = true;
+            var errorMessage = "";
+            if (code === "" || nom === "" || prenom === "" || semestre === "") {
+                errorMessage += "Veuillez remplir tous les champs.\n";
+                valid = false;
+            }
+            if (isNaN(notes[0]) || isNaN(notes[1]) || isNaN(notes[2]) || isNaN(notes[3]) || isNaN(notes[4]) || isNaN(notes[5])) {
+                errorMessage += "Les notes doivent être des nombres.\n";
+                valid = false;
+            }
+            if (semestre !== "Semestre 1" && semestre !== "Semestre 2") {
+                errorMessage += "Veuillez sélectionner un semestre valide.\n";
+                valid = false;
+            }
+            if (!valid) {
+                document.getElementById("error").innerText = errorMessage;
+                return;
+            }
+
+            // Calcul de la moyenne
+            var sum = notes.reduce((a, b) => a + b, 0);
+            var average = sum / notes.length;
+
+            // Vérification des conditions de validation du semestre
+            var semestreStatus = "";
+            if (average >= 12 && notes.filter(note => note < 12 && note >= 8).length < 3) {
+                semestreStatus = "Validé";
+            } else if (notes.some(note => note < 8) || notes.filter(note => note < 12 && note >= 8).length >= 3) {
+                semestreStatus = "Échoué";
+            } else {
+                semestreStatus = "En attente";
+            }
+
+            // Affichage du résultat dans le tableau
+            var tableRow = `<tr>
+                <td>${code}</td>
+                <td>${nom}</td>
+                <td>${prenom}</td>
+                <td>${semestre}</td>
+                <td>${notes[0]}</td>
+                <td>${notes[1]}</td>
+                <td>${notes[2]}</td>
+                <td>${notes[3]}</td>
+                <td>${notes[4]}</td>
+                <td>${notes[5]}</td>
+                <td>${average.toFixed(2)}</td>
+                <td>${semestreStatus}</td>
+            </tr>`;
+
+            // Ajout de la ligne au tableau
+            var tableContainer = document.getElementById("studentTableContainer");
+            var studentTable = document.getElementById("studentTable");
+            if (!studentTable) {
+                tableContainer.innerHTML = "<table id='studentTable'><thead><tr><th>Code</th><th>Nom</th><th>Prénom</th><th>Semestre</th><th>Module 1</th><th>Module 2</th><th>Module 3</th><th>Module 4</th><th>Module 5</th><th>Module 6</th><th>Moyenne</th><th>Statut</th></tr></thead><tbody>" + tableRow + "</tbody></table>";
+            } else {
+                studentTable.getElementsByTagName("tbody")[0].insertAdjacentHTML("beforeend", tableRow);
+            }
+
+            // Réinitialisation du formulaire
+            document.getElementById("studentForm").reset();
+            document.getElementById("error").innerText = "";
+        });
+    </script>
+</body>
+</
